@@ -3,20 +3,20 @@ use std::io::{self, BufRead};
 use std::path::Path;
 
 fn main() {
-    let filename = "./test.txt";
+    let filename = "./input.txt";
     let mut cal_vec = return_max_cal_vec(filename);
     first_part(&cal_vec);
     second_part(&mut cal_vec);
 }
 
 // Calculate the maximum calories
-fn first_part(calories: &Vec<i32>) -> &i32{
+fn first_part(calories: &Vec<i32>) -> &i32 {
     let max = calories.iter().max().expect("No max found");
     max
 }
 
 // Calculate the top 3 calories
-fn second_part(calories: &mut Vec<i32>) -> i32{
+fn second_part(calories: &mut Vec<i32>) -> i32 {
     let sorted_vec = calories;
     sorted_vec.sort_by(|a, b| b.cmp(a));
     let sum = sorted_vec.iter().take(3).fold(0, |acc, x| acc + x);
@@ -43,7 +43,6 @@ fn return_max_cal_vec(filename: &str) -> Vec<i32> {
             cal_vec.push(cal);
         }
     }
-
     cal_vec
 }
 
