@@ -1,8 +1,12 @@
-use std::error::Error;
-
+use std::fs::read_to_string;
+const FILENAME: &str = "src/input.txt"; 
 fn main() {
+calculate_total_points(FILENAME);
+}
+
+fn calculate_total_points(filename: &str) -> usize {
     let mut result = 0;
-    for round in include_str!("input.txt").lines().map(|line| line.trim()) {
+    for round in read_to_string(filename).unwrap().lines().map(|line| line.trim()) {
         let round =  round.chars().filter(|c| !c.is_whitespace()).collect::<String>();
         let round = Round {
             player_1: Move::compare(round.chars().nth(0).unwrap()).unwrap(),
@@ -17,6 +21,7 @@ fn main() {
         println!("{:?}",final_point);
     }
     println!("{:?}",result);
+    result
 }
 
 #[derive(Debug)]
@@ -80,5 +85,16 @@ impl Outcome {
             Outcome::Draw => 3,
             Outcome::Loss => 0,
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::calculate_total_points;
+
+    #[test]
+    fn test_total_points() {
+        let points = calculate_total_points("src/test.txt");
+        assert_eq!(points, 15);
     }
 }
