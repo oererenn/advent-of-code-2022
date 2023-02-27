@@ -2,14 +2,21 @@ use std::error::Error;
 
 fn main() {
     for round in include_str!("input.txt").lines().map(|line| line.trim()) {
-        println!("{round:?}");
+        let round =  round.chars().filter(|c| !c.is_whitespace()).collect::<String>();
+        let round = Round {
+            player_1: Move::compare(round.chars().nth(0).unwrap()).unwrap(),
+            player_2: Move::compare(round.chars().nth(1).unwrap()).unwrap(),
+        };
+
+        
+        println!("{:?}",round);
     }
 }
 
 #[derive(Debug)]
 struct Round {
-    Player1: Move,
-    Player2: Move,
+    player_1: Move,
+    player_2: Move,
 }
 
 #[derive(Debug)]
