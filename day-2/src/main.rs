@@ -1,16 +1,22 @@
 use std::error::Error;
 
 fn main() {
+    let mut result = 0;
     for round in include_str!("input.txt").lines().map(|line| line.trim()) {
         let round =  round.chars().filter(|c| !c.is_whitespace()).collect::<String>();
         let round = Round {
             player_1: Move::compare(round.chars().nth(0).unwrap()).unwrap(),
             player_2: Move::compare(round.chars().nth(1).unwrap()).unwrap(),
         };
+        let move_selection_point = round.player_2.inherent_points();
+        let outcome = round.player_1.outcome(round.player_2);
 
-        
-        println!("{:?}",round);
+        let outcome_point = outcome.points();
+        let final_point = move_selection_point + outcome_point;
+        result += final_point;
+        println!("{:?}",final_point);
     }
+    println!("{:?}",result);
 }
 
 #[derive(Debug)]
@@ -35,7 +41,7 @@ enum Move {
 
 impl Move {
     /// How many points do we get for picking that move?
-    fn inherent_points(self) -> usize {
+    fn inherent_points(&self) -> usize {
         match self {
             Move::Rock => 1,
             Move::Paper => 2,
@@ -53,7 +59,7 @@ impl Move {
     }
 
     fn outcome(self, theirs: Move) -> Outcome {
-        match (self, theirs) {
+        match (theirs, self) {
             (Move::Rock, Move::Rock) => Outcome::Draw,
             (Move::Rock, Move::Paper) => Outcome::Loss,
             (Move::Rock, Move::Scissors) => Outcome::Win,
@@ -63,6 +69,16 @@ impl Move {
             (Move::Scissors, Move::Rock) => Outcome::Loss,
             (Move::Scissors, Move::Paper) => Outcome::Win,
             (Move::Scissors, Move::Scissors) => Outcome::Draw,
+        }
+    }
+}
+
+impl Outcome {
+    fn points(self) -> usize {
+        match self {
+            Outcome::Win => 6,
+            Outcome::Draw => 3,
+            Outcome::Loss => 0,
         }
     }
 }
