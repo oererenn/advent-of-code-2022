@@ -7,13 +7,7 @@ fn main() {
 }
 
 fn sum_priorities(filename: &str) -> u32 {
-    // Elfs divided into 3 groups
-    // Every Elf carrying item type Badge
-    // At most two elfs carring other item type
-    // Find the common between all three elfs in each group
-    // Every tree line means a single group
-    //
-
+    
     let input = read_to_string(filename).unwrap();
     let input_vec = input.lines().collect::<Vec<&str>>();
     let input_chunk = input_vec.chunks(3);
