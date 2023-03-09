@@ -3,11 +3,11 @@ use std::{fs::read_to_string};
 const FILENAME: &str = "src/input.txt";
 
 fn main() {
-    let count = calculate_pairs(FILENAME);
-    println!("{}", count);
+    let overlap_count = calculate_overlap(FILENAME);
+    println!("{}", overlap_count);
 }
 
-fn calculate_pairs(filename: &str) -> i32 {
+fn calculate_overlap(filename: &str) -> i32 {
     read_to_string(filename).unwrap().lines().map(|l| {
         let (l, r) = l.split_once(',').unwrap();
         let ((a, b), (c, d)) = (l.split_once('-').unwrap(), r.split_once('-').unwrap());
@@ -18,17 +18,17 @@ fn calculate_pairs(filename: &str) -> i32 {
             d.parse::<u8>().unwrap(),
         )
     })
-    .filter(|(a, b, c, d)| c >= a && d <= b || a >= c && b <= d)
+    .filter(|(a, b, c, d)| (d >= b && c <= b) || ( d >= a && d <= b))
     .count() as i32
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::calculate_pairs;
+    use crate::calculate_overlap;
 
     #[test]
     fn test_sum_priorities() {
-        let pair_count = calculate_pairs("src/test.txt");
-        assert_eq!(pair_count, 2);
+        let overlap_count = calculate_overlap("src/test.txt");
+        assert_eq!(overlap_count, 4);
     }
 }
